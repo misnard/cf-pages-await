@@ -11293,10 +11293,12 @@ async function run() {
       console.log("Waiting for the deployment to start...");
       continue;
     }
+    console.log("deployment!!!", deployment);
     const latestStage = deployment.latest_stage;
     if (latestStage.name !== lastStage) {
       lastStage = deployment.latest_stage.name;
-      console.log("# Now at stage: " + lastStage);
+      console.log("# Now at stage before: " + lastStage);
+      console.log("progress ?", markedAsInProgress);
       if (!markedAsInProgress) {
         await updateDeployment(token, deployment, "in_progress");
         markedAsInProgress = true;
@@ -11373,6 +11375,7 @@ async function updateDeployment(token, deployment, state) {
     return;
   const octokit = github.getOctokit(token);
   const environment = deployment.environment === "production" ? "Production" : `Preview (${deployment.deployment_trigger.metadata.branch})`;
+  console.log("here ?");
   const sharedOptions = {
     owner: import_utils.context.repo.owner,
     repo: import_utils.context.repo.repo
