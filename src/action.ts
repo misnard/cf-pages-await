@@ -46,7 +46,6 @@ export default async function run() {
       lastStage = deployment.latest_stage.name;
       console.log('# Now at stage before: ' + lastStage);
 
-      console.log("progress ?", markedAsInProgress)
       if (!markedAsInProgress) {
         await updateDeployment(token, deployment, 'in_progress');
         markedAsInProgress = true;
@@ -54,7 +53,7 @@ export default async function run() {
     }
 
     if (latestStage.status === 'failure') {
-      console.log("Deployment Failed !")
+      console.log("# Deployment Failed !");
       waiting = false;
       core.setFailed(`Deployment failed on step: ${latestStage.name}!`);
       await updateDeployment(token, deployment, 'failure');
@@ -147,7 +146,6 @@ async function updateDeployment(token: string, deployment: Deployment, state: 's
   const environment = deployment.environment === 'production'
     ? 'Production'
     : `Preview (${deployment.deployment_trigger.metadata.branch})`;
-  console.log("here ?")
 
   const sharedOptions = {
     owner: context.repo.owner,
