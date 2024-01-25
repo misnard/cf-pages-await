@@ -46,7 +46,7 @@ export default async function run() {
 
     if (latestStage.name !== lastStage) {
       lastStage = deployment.latest_stage.name;
-      console.log('# Now at stage: ' + lastStage);
+      console.log('# Now at stage before: ' + lastStage);
 
       console.log("progress ?", markedAsInProgress)
       if (!markedAsInProgress) {
