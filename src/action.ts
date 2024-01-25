@@ -40,8 +40,6 @@ export default async function run() {
       continue;
     }
 
-    console.log("deployment!!!", deployment)
-
     const latestStage = deployment.latest_stage;
 
     if (latestStage.name !== lastStage) {
@@ -55,14 +53,15 @@ export default async function run() {
       }
     }
 
-    if (latestStage.status === 'failed') {
+    if (latestStage.status === 'failure') {
+      console.log("Deployment Failed !")
       waiting = false;
       core.setFailed(`Deployment failed on step: ${latestStage.name}!`);
       await updateDeployment(token, deployment, 'failure');
       return;
     }
 
-    if (latestStage.name === 'deploy' && ['success', 'failed'].includes(latestStage.status)) {
+    if (latestStage.name === 'deploy' && ['success', 'failure'].includes(latestStage.status)) {
       waiting = false;
 
       const aliasUrl = deployment.aliases && deployment.aliases.length > 0 ? deployment.aliases[0] : deployment.url;
@@ -72,7 +71,7 @@ export default async function run() {
       core.setOutput('environment', deployment.environment);
       core.setOutput('url', deployment.url);
       core.setOutput('alias', aliasUrl);
-      core.setOutput('success', deployment.latest_stage.status === 'success' ? true : false);
+      core.setOutput('success', deployment.latest_stage.status === 'success');
 
       // Update deployment (if enabled)
       if (token !== '') {
