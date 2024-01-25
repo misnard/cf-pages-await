@@ -40,6 +40,8 @@ export default async function run() {
       continue;
     }
 
+    console.log("deployment!!!", deployment)
+
     const latestStage = deployment.latest_stage;
 
     if (latestStage.name !== lastStage) {
