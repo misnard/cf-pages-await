@@ -46,6 +46,7 @@ export default async function run() {
       lastStage = deployment.latest_stage.name;
       console.log('# Now at stage: ' + lastStage);
 
+      console.log("progress ?", markedAsInProgress)
       if (!markedAsInProgress) {
         await updateDeployment(token, deployment, 'in_progress');
         markedAsInProgress = true;
@@ -145,6 +146,7 @@ async function updateDeployment(token: string, deployment: Deployment, state: 's
   const environment = deployment.environment === 'production'
     ? 'Production'
     : `Preview (${deployment.deployment_trigger.metadata.branch})`;
+  console.log("here ?")
 
   const sharedOptions = {
     owner: context.repo.owner,
